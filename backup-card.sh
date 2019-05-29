@@ -72,6 +72,18 @@ sudo mount ${DEV_FILE}5 card-rootfs
 echo Copying card-rootfs to rootfs 
 sudo cp -r card-rootfs/* rootfs/ >cp-files.txt
 
+# Resize Helper oneshot service
+FILE_PATH="etc/systemd/system/basic.target.wants/resize-helper.service"
+TARGET_PATH="/lib/systemd/system/resize-helper.service"
+
+if [[ ! -L "rootfs/${FILE_PATH}" ]]; then 
+    # Link does not exists then create it
+    sudo ln -sv ${TARGET_PATH} rootfs/${FILE_PATH}
+    echo Resize Helper Service enabled 
+else
+    echo Resize Helper Service enable already
+fi
+
 sudo umount rootfs
 sudo umount card-rootfs
 
